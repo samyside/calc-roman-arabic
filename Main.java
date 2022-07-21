@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
 class Main {
 
@@ -7,6 +6,7 @@ class Main {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter splited by spaces : ");
 		String input = sc.nextLine();
+		sc.close();
 
 		String result = calc(input);
 		System.out.println(result);
@@ -14,7 +14,14 @@ class Main {
 
 	public static String calc(String input) {
 		String[] items = input.split(" ");
+		// Проверить кол-во чисел для арифметики
+		// Числа арабские или римские
+		// Преобразовать римские в арабские
+		// Арифметическая операция над числами
+		// Преобразовать в римские (при необходимости)
+		int a = Integer.valueOf(items[0]);
+		int b = Integer.valueOf(items[1]);
 
-		return Arrays.toString(items);
+		return String.valueOf(a+b);
 	}
 }
