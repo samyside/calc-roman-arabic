@@ -61,7 +61,7 @@ class Calc {
 		// Арифметическая операция над числами
 		String operation = items[1];
 		switch (operation) {
-			case "+": result = addtion(a, b); break;
+			case "+": result = addition(a, b); break;
 			case "-": result = subtract(a, b); break;
 			case "*": result = multiply(a, b); break;
 			case "/": result = division(a, b); break;
@@ -115,7 +115,7 @@ class Calc {
 		return true;
 	}
 
-	String addtion(int a, int b) throws Exception {
+	String addition(int a, int b) throws Exception {
 		int result = a + b;
 		//TODO Допустимы значения >3999 тольк для арабских чисел
 		if (result > 3999) {
