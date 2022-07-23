@@ -1,6 +1,8 @@
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Map;
 
-class Main {
+public class Main {
 
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
@@ -8,11 +10,15 @@ class Main {
 		String input = sc.nextLine();
 		sc.close();
 
-		String result = calc(input);
+		Calc calculator = new Calc();
+
+		String result = calculator.calc(input);
 		System.out.println(result);
 	}
+}
 
-	public static String calc(String input) throws Exception {
+class Calc {
+	public String calc(String input) throws Exception {
 		String result = null;
 		String[] items = input.split(" ");
 		// Проверить кол-во чисел для арифметики
@@ -33,8 +39,8 @@ class Main {
 		// Арифметическая операция над числами
 		String operation = items[1];
 		switch (operation) {
-			case "+": add(a, b); break;
-			case "-": minus(a, b); break;
+			case "+": addtion(a, b); break;
+			case "-": subtract(a, b); break;
 			case "*": multiply(a, b); break;
 			case "/": division(a, b); break;
 			default: throw new Exception("Unable operation");
@@ -48,21 +54,44 @@ class Main {
 		return result;
 	}
 
-	static int parseRomanToArabic(String number) {
+	int parseRomanToArabic(String number) {
+		String[][] romanNumbers = new String[][] {
+			{"I", "1"},
+			{"V", "5"},
+			{"X", "10"},
+			{"L", "50"},
+			{"C", "100"},
+			{"D", "500"},
+			{"M", "1000"}
+		};
+		// MCCXIIX
+
+		//associative array
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("1", "I");
+		map.put("4", "IV");
+		map.put("5", "V");
+		map.put("9", "IX");
+		map.put("10", "X");
+		map.put("50", "L");
+		map.put("100", "C");
+		map.put("500", "D");
+		map.put("1000", "M");
+		
 		return 0;
 	}
 
-	static String parseArabicToRoman() {
+	String parseArabicToRoman() {
 
 		return null;
 	}
 
-	static boolean isRomanNumber(String a, String b) {
+	boolean isRomanNumber(String a, String b) {
 
 		return false;
 	}
 
-	static int add(int a, int b) throws Exception {
+	int addtion(int a, int b) throws Exception {
 		int result = a + b;
 		if (result > 3999) {
 			throw new Exception("Result is too much");
@@ -70,7 +99,7 @@ class Main {
 		return result;
 	}
 
-	static int minus(int a, int b) throws Exception {
+	int subtract(int a, int b) throws Exception {
 		int result = a - b;
 		if (result < 0) {
 			throw new Exception("Result is too few");
@@ -78,7 +107,7 @@ class Main {
 		return result;
 	}
 
-	static int multiply(int a, int b) throws Exception {
+	int multiply(int a, int b) throws Exception {
 		int result = a * b;
 		if (result > 3999) {
 			throw new Exception("Result is too much");
@@ -86,7 +115,7 @@ class Main {
 		return result;
 	}
 
-	static int division(int a, int b) throws Exception {
+	int division(int a, int b) throws Exception {
 		int result = a / b;
 		if (a % b > 0) {
 			throw new Exception("Result should be Integer");
