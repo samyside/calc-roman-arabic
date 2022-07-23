@@ -1,13 +1,12 @@
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Map;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		System.out.print("enter : ");
-		String input = sc.nextLine();
+		String input = "XII + VI";
+		System.out.println("enter : " + input);
+		// String input = sc.nextLine();
 		sc.close();
 
 		Calc calculator = new Calc();
@@ -27,7 +26,7 @@ class Calc {
 		
 		// Числа арабские или римские
 		boolean numberRoman = false;
-		if (numberRoman = isRomanNumber("", "")) {
+		if (numberRoman = isRomanNumbers("", "")) {
 			// Преобразовать римские в арабские
 			a = parseRomanToArabic(items[0]);
 			b = parseRomanToArabic(items[2]);
@@ -39,14 +38,15 @@ class Calc {
 		// Арифметическая операция над числами
 		String operation = items[1];
 		switch (operation) {
-			case "+": addtion(a, b); break;
-			case "-": subtract(a, b); break;
-			case "*": multiply(a, b); break;
-			case "/": division(a, b); break;
+			case "+": result = addtion(a, b); break;
+			case "-": result = subtract(a, b); break;
+			case "*": result = multiply(a, b); break;
+			case "/": result = division(a, b); break;
 			default: throw new Exception("Unable operation");
 		}
 
 		// Преобразовать в римские (при необходимости)
+		numberRoman = false; // временная заглушка
 		if (numberRoman) {
 			result = parseArabicToRoman();
 		}
@@ -54,31 +54,37 @@ class Calc {
 		return result;
 	}
 
-	int parseRomanToArabic(String number) {
-		String[][] romanNumbers = new String[][] {
-			{"I", "1"},
-			{"V", "5"},
-			{"X", "10"},
-			{"L", "50"},
-			{"C", "100"},
-			{"D", "500"},
-			{"M", "1000"}
-		};
-		// MCCXIIX
+	int parseRomanToArabic(String roman) {
+		int arabic = 0;
 
-		//associative array
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("1", "I");
-		map.put("4", "IV");
-		map.put("5", "V");
-		map.put("9", "IX");
-		map.put("10", "X");
-		map.put("50", "L");
-		map.put("100", "C");
-		map.put("500", "D");
-		map.put("1000", "M");
+		// for test only
+		// roman = "MCCXIX";
+
+		String[][] romanArr = 
+		{
+			{"M", "1000"},
+			{"MC", "900"},
+			{"D", "500"},
+			{"DC", "400"},
+			{"C", "100"},
+			{"CX", "90"},
+			{"L", "50"},
+			{"LX", "40"},
+			{"X", "10"},
+			{"IX", "9"},
+			{"V", "5"},
+			{"IV", "4"},
+			{"I", "1"}
+		};
+
+		for (String[] strings : romanArr) {
+			while (roman.startsWith(strings[0])) {
+				roman = roman.replaceFirst(strings[0], "");
+				arabic += Integer.valueOf(strings[1]);
+			}
+		}
 		
-		return 0;
+		return arabic;
 	}
 
 	String parseArabicToRoman() {
@@ -86,40 +92,49 @@ class Calc {
 		return null;
 	}
 
-	boolean isRomanNumber(String a, String b) {
-
-		return false;
+	boolean isRomanNumbers(String a, String b) {
+		return isRoman(a) && isRoman(b) ? true : false;
 	}
 
-	int addtion(int a, int b) throws Exception {
+	boolean isRoman(String num) {
+		char[] romanNumbers = {'I','V','X','L','C','D','M'};
+		int i = 0;
+		for (char c : num.toCharArray()) {
+			if (c != romanNumbers[i]) return false;
+		}
+
+		return true;
+	}
+
+	String addtion(int a, int b) throws Exception {
 		int result = a + b;
 		if (result > 3999) {
 			throw new Exception("Result is too much");
 		}
-		return result;
+		return String.valueOf(result);
 	}
 
-	int subtract(int a, int b) throws Exception {
+	String subtract(int a, int b) throws Exception {
 		int result = a - b;
 		if (result < 0) {
 			throw new Exception("Result is too few");
 		}
-		return result;
+		return String.valueOf(result);
 	}
 
-	int multiply(int a, int b) throws Exception {
+	String multiply(int a, int b) throws Exception {
 		int result = a * b;
 		if (result > 3999) {
 			throw new Exception("Result is too much");
 		}
-		return result;
+		return String.valueOf(result);
 	}
 
-	int division(int a, int b) throws Exception {
+	String division(int a, int b) throws Exception {
 		int result = a / b;
 		if (a % b > 0) {
 			throw new Exception("Result should be Integer");
 		}
-		return result;
+		return String.valueOf(result);
 	}
 }
