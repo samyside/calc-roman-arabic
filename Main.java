@@ -4,9 +4,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		String input = "XII + VI";
-		System.out.println("enter : " + input);
-		// String input = sc.nextLine();
+		String input = sc.nextLine();
 		sc.close();
 
 		Calc calculator = new Calc();
@@ -17,22 +15,23 @@ public class Main {
 }
 
 class Calc {
-	final String[][] romanArr = 
+	final String[][] ROMAN_ARRAY = 
 	{
 		{"M", "1000"},
-		{"MC", "900"},
+		{"CM", "900"},
 		{"D", "500"},
-		{"DC", "400"},
+		{"CD", "400"},
 		{"C", "100"},
-		{"CX", "90"},
+		{"XC", "90"},
 		{"L", "50"},
-		{"LX", "40"},
+		{"XL", "40"},
 		{"X", "10"},
 		{"IX", "9"},
 		{"V", "5"},
 		{"IV", "4"},
 		{"I", "1"}
 	};
+	boolean romanNumber = false;
 
 	public String calc(String input) throws Exception {
 		String result = null;
@@ -46,7 +45,6 @@ class Calc {
 		int a = 0, b = 0;
 		
 		// Числа арабские или римские
-		boolean romanNumber = false;
 		if (romanNumber = isRomanNumber(A) && isRomanNumber(B)) {
 			// Преобразовать римские в арабские
 			a = parseRomanToArabic(A);
@@ -69,17 +67,17 @@ class Calc {
 		}
 
 		// Преобразовать в римские (при необходимости)
-		romanNumber = false; // временная заглушка
+		// romanNumber = false; // временная заглушка
 		if (romanNumber) result = parseArabicToRoman(result);
 
 		return result;
 	}
 
 	int parseRomanToArabic(String roman) {
+		roman = roman.toUpperCase();
 		int arabic = 0;
-		// roman = "MCCXIX";
 
-		for (String[] strings : romanArr) {
+		for (String[] strings : ROMAN_ARRAY) {
 			while (roman.startsWith(strings[0])) {
 				roman = roman.replaceFirst(strings[0], "");
 				arabic += Integer.valueOf(strings[1]);
@@ -89,10 +87,17 @@ class Calc {
 		return arabic;
 	}
 
-	String parseArabicToRoman(String arabic) {
-		//TODO Реализовать метод
-
-		return null;
+	String parseArabicToRoman(String number) {
+    	int arabic = Integer.valueOf(number);
+        String roman = "";
+        for (String[] num : ROMAN_ARRAY) {
+            while (arabic >= Integer.valueOf(num[1])) {
+                roman += num[0];
+                arabic -= Integer.valueOf(num[1]);
+            }
+        }
+        
+		return roman;
 	}
 
 	boolean isArabicNumber(String num) {
@@ -106,10 +111,11 @@ class Calc {
 	}
 
 	boolean isRomanNumber(String num) {
-		char[] romanNumbers = {'I','V','X','L','C','D','M'};
-		int i = 0;
-		for (char c : num.toCharArray()) {
-			if (c != romanNumbers[i]) return false;
+		num = num.toUpperCase();
+		String romanNumbers = "IVXLCDM";
+		for (int i=0; i<num.length(); i++) {
+			String str = String.valueOf(num.charAt(i));
+			if (!romanNumbers.contains(str)) return false;
 		}
 
 		return true;
@@ -117,18 +123,16 @@ class Calc {
 
 	String addition(int a, int b) throws Exception {
 		int result = a + b;
-		//TODO Допустимы значения >3999 тольк для арабских чисел
-		if (result > 3999) {
-			throw new Exception("Result is too much");
+		if (result > 3999 && romanNumber) {
+			throw new Exception("Result is too much for Roman number");
 		}
 		return String.valueOf(result);
 	}
 
 	String subtract(int a, int b) throws Exception {
 		int result = a - b;
-		//TODO Допустимы отрицательные арабские числа, римские - нет
-		if (result < 0) {
-			throw new Exception("Result is too few");
+		if (result <= 0 && romanNumber) {
+			throw new Exception("Result is too few for Roman number");
 		}
 		return String.valueOf(result);
 	}
