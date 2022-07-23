@@ -17,22 +17,45 @@ public class Main {
 }
 
 class Calc {
+	final String[][] romanArr = 
+	{
+		{"M", "1000"},
+		{"MC", "900"},
+		{"D", "500"},
+		{"DC", "400"},
+		{"C", "100"},
+		{"CX", "90"},
+		{"L", "50"},
+		{"LX", "40"},
+		{"X", "10"},
+		{"IX", "9"},
+		{"V", "5"},
+		{"IV", "4"},
+		{"I", "1"}
+	};
+
 	public String calc(String input) throws Exception {
 		String result = null;
 		String[] items = input.split(" ");
 		// Проверить кол-во чисел для арифметики
 		if (items.length > 3) throw new Exception("Too many parameters");
+		else if (items.length < 3) throw new Exception("Too few parameters");
+
+		final String A = items[0];
+		final String B = items[2];
 		int a = 0, b = 0;
 		
 		// Числа арабские или римские
-		boolean numberRoman = false;
-		if (numberRoman = isRomanNumbers("", "")) {
+		boolean romanNumber = false;
+		if (romanNumber = isRomanNumber(A) && isRomanNumber(B)) {
 			// Преобразовать римские в арабские
-			a = parseRomanToArabic(items[0]);
-			b = parseRomanToArabic(items[2]);
+			a = parseRomanToArabic(A);
+			b = parseRomanToArabic(B);
+		} else if (isArabicNumber(A) && isArabicNumber(B)) {
+			a = Integer.valueOf(A);
+			b = Integer.valueOf(B);
 		} else {
-			a = Integer.valueOf(items[0]);
-			b = Integer.valueOf(items[2]);
+			throw new Exception("Not a number");
 		}
 
 		// Арифметическая операция над числами
@@ -46,36 +69,15 @@ class Calc {
 		}
 
 		// Преобразовать в римские (при необходимости)
-		numberRoman = false; // временная заглушка
-		if (numberRoman) {
-			result = parseArabicToRoman();
-		}
+		romanNumber = false; // временная заглушка
+		if (romanNumber) result = parseArabicToRoman(result);
 
 		return result;
 	}
 
 	int parseRomanToArabic(String roman) {
 		int arabic = 0;
-
-		// for test only
 		// roman = "MCCXIX";
-
-		String[][] romanArr = 
-		{
-			{"M", "1000"},
-			{"MC", "900"},
-			{"D", "500"},
-			{"DC", "400"},
-			{"C", "100"},
-			{"CX", "90"},
-			{"L", "50"},
-			{"LX", "40"},
-			{"X", "10"},
-			{"IX", "9"},
-			{"V", "5"},
-			{"IV", "4"},
-			{"I", "1"}
-		};
 
 		for (String[] strings : romanArr) {
 			while (roman.startsWith(strings[0])) {
@@ -87,16 +89,23 @@ class Calc {
 		return arabic;
 	}
 
-	String parseArabicToRoman() {
+	String parseArabicToRoman(String arabic) {
+		//TODO Реализовать метод
 
 		return null;
 	}
 
-	boolean isRomanNumbers(String a, String b) {
-		return isRoman(a) && isRoman(b) ? true : false;
+	boolean isArabicNumber(String num) {
+		try {
+			Integer.parseInt(num);
+			return true;
+		} catch (NumberFormatException e) {
+			e.getMessage();
+			return false;
+		}
 	}
 
-	boolean isRoman(String num) {
+	boolean isRomanNumber(String num) {
 		char[] romanNumbers = {'I','V','X','L','C','D','M'};
 		int i = 0;
 		for (char c : num.toCharArray()) {
@@ -108,6 +117,7 @@ class Calc {
 
 	String addtion(int a, int b) throws Exception {
 		int result = a + b;
+		//TODO Допустимы значения >3999 тольк для арабских чисел
 		if (result > 3999) {
 			throw new Exception("Result is too much");
 		}
@@ -116,6 +126,7 @@ class Calc {
 
 	String subtract(int a, int b) throws Exception {
 		int result = a - b;
+		//TODO Допустимы отрицательные арабские числа, римские - нет
 		if (result < 0) {
 			throw new Exception("Result is too few");
 		}
